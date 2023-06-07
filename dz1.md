@@ -29,7 +29,7 @@ INSERT 0 2
 *commit;*
 COMMIT
 
-**посмотреть текущий уровень изоляции:**
+**посмотреть текущий уровень изоляции**
 *show transaction isolation level;*
 transaction_isolation
 -----------------------
