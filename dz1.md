@@ -31,18 +31,25 @@ SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: 
 **сделать в первой сессии новую таблицу и наполнить ее данными**
 
 *create table persons(id serial, first_name text, second_name text);*
+
 CREATE TABLE
+
 *commit;*
+
 COMMIT
 
 *insert into persons(first_name, second_name) values('ivan', 'ivanov'),('petr', 'petrov');*
+
 INSERT 0 2
+
 *commit;*
+
 COMMIT
 
 **посмотреть текущий уровень изоляции**
 
 *show transaction isolation level;*
+
 transaction_isolation
 -----------------------
  read committed
@@ -50,16 +57,19 @@ transaction_isolation
 **начать новую транзакцию в обоих сессиях с дефолтным (не меняя) уровнем изоляции**
 
 *begin;*
+
 BEGIN
 
 **в первой сессии добавить новую запись**
 
 *insert into persons(first_name, second_name) values('sergey', 'sergeev');*
+
 INSERT 0 1
 
 **сделать во второй сессии**
 
 *select * from persons;*
+
 id | first_name | second_name
 ----+------------+-------------
   1 | ivan       | ivanov
@@ -72,11 +82,13 @@ id | first_name | second_name
 **Завершить первую транзакцию**
 
 *commit;*
+
 COMMIT
 
 **Cделать во второй сессии:**
 
 *select * from persons;*
+
 id | first_name | second_name
 ----+------------+-------------
   1 | ivan       | ivanov
@@ -90,6 +102,7 @@ id | first_name | second_name
 **Завершите транзакцию во второй сессии.**
 
 *commit;*
+
 COMMIT
 
 **Начать новые но уже repeatable read транзации**
@@ -97,11 +110,13 @@ COMMIT
 **set transaction isolation level repeatable read;**
 
 *begin transaction isolation level repeatable read;*
+
 BEGIN
 
 **В первой сессии добавить новую запись**
 
 *insert into persons(first_name, second_name) values('sveta', 'svetova');*
+
 INSERT 0 1
 
 **Сделать во второй сессии**
@@ -109,6 +124,7 @@ INSERT 0 1
 **1 чтение**
 
 *select * from persons;*
+
  id | first_name | second_name
 ----+------------+-------------
   1 | ivan       | ivanov
@@ -120,12 +136,15 @@ INSERT 0 1
 Нет, транзакция не завершена.
 
 **Завершить первую транзакцию**
+
 *commit;*
+
 COMMIT
 
 **Сделать во второй сессии**
 
 *select * from persons;*
+
  id | first_name | second_name
 ----+------------+-------------
   1 | ivan       | ivanov
@@ -139,6 +158,7 @@ COMMIT
 **Завершить вторую транзакцию**
 
 *commit;*
+
 COMMIT
 
 **Сделать во второй сессии**
