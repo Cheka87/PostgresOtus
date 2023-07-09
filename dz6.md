@@ -6,23 +6,19 @@
 
 postgres=# \dt
 
-        List of relations
+List of relations
 
  Schema | Name | Type  |  Owner
-
---------+------+-------+----------
-
+--------|------|-------|----------
  public | test | table | postgres
 
 (1 row)
 
 postgres=# select * from test;
 
- c1
-
-----
-
- 1
+ c1 |
+----|
+ 1  |
 
 (1 row)
 
@@ -42,23 +38,19 @@ postgres=# select * from test;
 
 postgres=# \dt
 
-        List of relations
+List of relations
 
  Schema | Name | Type  |  Owner
-
---------+------+-------+----------
-
+--------|------|-------|----------
  public | test | table | postgres
 
 (1 row)
 
 postgres=# select * from test;
 
- c1
-
-----
-
- 1
+ c1 |
+----|
+ 1  |
 
 (1 row)
 
