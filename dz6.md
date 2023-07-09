@@ -5,16 +5,25 @@
 до смены каталога:
 
 postgres=# \dt
+
         List of relations
+
  Schema | Name | Type  |  Owner
+
 --------+------+-------+----------
+
  public | test | table | postgres
+
 (1 row)
 
 postgres=# select * from test;
+
  c1
+
 ----
+
  1
+
 (1 row)
 
 Создан и примонтирован к ВМ Ubuntu диск на 10GB.
@@ -32,15 +41,24 @@ postgres=# select * from test;
 После смены каталога
 
 postgres=# \dt
+
         List of relations
+
  Schema | Name | Type  |  Owner
+
 --------+------+-------+----------
+
  public | test | table | postgres
+
 (1 row)
 
 postgres=# select * from test;
+
  c1
+
 ----
+
  1
+
 (1 row)
 
