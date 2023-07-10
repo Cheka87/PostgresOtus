@@ -101,6 +101,6 @@ alter user testread in database testdb set search_path = testnm;
 
 ALTER default privileges in SCHEMA testnm grant SELECT on TABLES to readonly;
 
-Да, не булет перепрописывания прав на вновь созданную таблицу. Но если создать новую таблицу в схеме public, а потом сменить схему для этой таблицы на testnm,
+Да, не будет перепрописывания прав на вновь созданную таблицу. Но если создать новую таблицу в схеме public, а потом сменить схему для этой таблицы на testnm,
 
 пользоватенль testread сможет ее увидеть, т.к. стоит alter default..
