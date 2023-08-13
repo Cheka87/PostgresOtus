@@ -141,9 +141,9 @@ select * from student limit 3;
 
  SELECT relname, n_live_tup, n_dead_tup, trunc(100*n_dead_tup/(n_live_tup+1))::float "ratio%", last_autovacuum FROM pg_stat_user_TABLEs WHERE relname = 'student';
 
- relname | n_live_tup | n_dead_tup | ratio% |        last_autovacuum
----------+------------+------------+--------+-------------------------------
- student |    1000000 |    1000000 |     99 | 2023-08-13 12:24:08.851127+03
+ relname | n_live_tup | n_dead_tup | ratio% |        last_autovacuum       |
+---------|------------|------------|--------|------------------------------|
+ student |    1000000 |    1000000 |     99 | 2023-08-13 12:24:08.851127+03|
 
 
 
