@@ -2,7 +2,7 @@
 
 sudo -u postgres pgbench -i postgres
 
-Первый прогон после установки
+**Первый прогон после установки**
 
 sudo -u postgres pgbench -c8 -P 6 -T 60 -U postgres postgres
 
@@ -32,7 +32,7 @@ latency stddev = 19.755 ms
 initial connection time = 20.637 ms
 tps = 1306.417607 (without initial connection time)
 
-Применим параметры из приложенного файла и запустим pgbench снова.
+**Применим параметры из приложенного файла и запустим pgbench снова.**
 
 alter system set max_connections=40;
 
@@ -88,54 +88,59 @@ tps = 1320.680050 (without initial connection time)
 
 
 Изменились значения tps, после второго прогона стали больше.
+
 Уменьшилась средняя задержка.
+
 Уменьшилась задержка вывода.
 
 
 
+**Создать таблицу с текстовым полем и заполнить случайными или сгенерированными данным в размере 1млн строк.**
 
-Создать таблицу с текстовым полем и заполнить случайными или сгенерированными данным в размере 1млн строк.
-
-CREATE TABLE student(
-  id serial,
-  fio char(100)
-);
+CREATE TABLE student(id serial,fio char(100));
 
 INTO student(fio) SELECT 'noname' FROM generate_series(1,1000000);
 
 SELECT pg_size_pretty(pg_total_relation_size('student'));
 
- pg_size_pretty
-----------------
- 135 MB
-
+ pg_size_pretty |
+----------------|
+ 135 MB         |
 
 
 select * from student limit 3;
-   id   |                                                 fio
---------+------------------------------------------------------------------------------------------------------
- 999479 | noname
- 999480 | noname
- 999481 | noname
+
+   id   | fio    |
+--------|--------|
+ 999479 | noname |
+ 999480 | noname |
+ 999481 | noname |
+
 
  update student set fio = (select fio || 1::text from student limit 1);
+
  update student set fio = (select fio || 1::text from student limit 1);
+
  update student set fio = (select fio || 1::text from student limit 1);
+
  update student set fio = (select fio || 1::text from student limit 1);
+
  update student set fio = (select fio || 1::text from student limit 1);
 
 
 
  SELECT relname, n_live_tup, n_dead_tup, trunc(100*n_dead_tup/(n_live_tup+1))::float "ratio%", last_autovacuum FROM pg_stat_user_TABLEs WHERE relname = 'student';
- relname | n_live_tup | n_dead_tup | ratio% |        last_autovacuum
----------+------------+------------+--------+-------------------------------
- student |    1000000 |          0 |      0 | 2023-08-13 12:20:09.627315+03
+
+ relname | n_live_tup | n_dead_tup | ratio% |        last_autovacuum        |
+---------|------------|------------|--------|-------------------------------|
+ student |    1000000 |          0 |      0 | 2023-08-13 12:20:09.627315+03 |
 
 
 
- сразу после обновления
+ Сразу после обновления
 
  SELECT relname, n_live_tup, n_dead_tup, trunc(100*n_dead_tup/(n_live_tup+1))::float "ratio%", last_autovacuum FROM pg_stat_user_TABLEs WHERE relname = 'student';
+
  relname | n_live_tup | n_dead_tup | ratio% |        last_autovacuum
 ---------+------------+------------+--------+-------------------------------
  student |    1000000 |    1000000 |     99 | 2023-08-13 12:24:08.851127+03
@@ -143,23 +148,27 @@ select * from student limit 3;
 
 
  SELECT pg_size_pretty(pg_total_relation_size('student'));
- pg_size_pretty
-----------------
- 539 MB
-(1 row)
 
-через минуту
+  pg_size_pretty |
+ ----------------|
+  539 MB         |
+
+
+Через минуту, отработал автовакуум.
 
 SELECT relname, n_live_tup, n_dead_tup, trunc(100*n_dead_tup/(n_live_tup+1))::float "ratio%", last_autovacuum FROM pg_stat_user_TABLEs WHERE relname = 'student';
- relname | n_live_tup | n_dead_tup | ratio% |        last_autovacuum
----------+------------+------------+--------+-------------------------------
- student |    1499949 |          0 |      0 | 2023-08-13 12:25:10.405006+03
+
+ relname | n_live_tup | n_dead_tup | ratio% |        last_autovacuum        |
+---------|------------|------------|--------|-------------------------------|
+ student |    1499949 |          0 |      0 | 2023-08-13 12:25:10.405006+03 |
 
 
 Отключаем фвтовакуум
 
 ALTER TABLE student SET (autovacuum_enabled = off);
---------------------------------------------------------------------------------
+
+Обновляем строки 10 раз.
+
 update student set fio = (select fio || '_11' from student limit 1);
 
 update student set fio = (select fio || '_12' from student limit 1);
@@ -201,17 +210,29 @@ SELECT relname, n_live_tup, n_dead_tup, trunc(100*n_dead_tup/(n_live_tup+1))::fl
 После vacuum рамер файла не поменялся.
 
 vacuum verbose student;
+
 INFO:  vacuuming "postgres.public.student"
+
 INFO:  finished vacuuming "postgres.public.student": index scans: 0
+
 pages: 0 removed, 189636 remain, 189636 scanned (100.00% of total)
+
 tuples: 1000158 removed, 1000000 remain, 0 are dead but not yet removable
+
 removable cutoff: 237977, which was 0 XIDs old when operation ended
+
 new relfrozenxid: 237976, which is 12 XIDs ahead of previous value
+
 index scan not needed: 172398 pages from table (90.91% of total) had 9998675 dead item identifiers removed
+
 avg read rate: 131.318 MB/s, avg write rate: 346.666 MB/s
+
 buffer usage: 320549 hits, 58792 misses, 155205 dirtied
+
 WAL usage: 379288 records, 120676 full page images, 32431278 bytes
+
 system usage: CPU: user: 0.39 s, system: 0.25 s, elapsed: 3.49 s
+
 VACUUM
 
 SELECT pg_size_pretty(pg_total_relation_size('student'));
