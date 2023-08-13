@@ -4,4 +4,6 @@
 
  2. 10 минут c помощью утилиты pgbench подавайте нагрузку.
 
+ 0/1798BA40
+
  sudo -u postgres -p 5432  pgbench -c8 -P 6 -T 600 -U postgres postgres
