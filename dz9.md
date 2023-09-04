@@ -4,6 +4,16 @@
 
  2. 10 минут c помощью утилиты pgbench подавайте нагрузку.
 
- 0/1798BA40
-
- sudo -u postgres -p 5432  pgbench -c8 -P 6 -T 600 -U postgres postgres
+current_wal_lsn до подачи нагрузки
+0/293E7818
+Создаем таблицы для нагрузочного тестирования утилитой pgbench
+pgbench -i buffer_temp
+Запускам нагрузку на 10 минут
+ sudo -u postgres  pgbench -c8 -P 6 -T 600 -U postgres buffer_temp
+current_wal_lsn после остановки нагрузки
+0/52EB5788
+Объем сгенерированных wal-файлов
+667MB
+Количество контрольных точек
+35
+Контрольные точки выполнялись по расписанию.
