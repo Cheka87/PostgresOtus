@@ -1,12 +1,13 @@
  1. Настройте выполнение контрольной точки раз в 30 секунд.
 
- alter system set checkpoint_timeout='30s';
+    alter system set checkpoint_timeout='30s';
 
  2. 10 минут c помощью утилиты pgbench подавайте нагрузку.
 
     *current_wal_lsn до подачи нагрузки*
 
     0/293E7818
+
     Создаем таблицы для нагрузочного тестирования утилитой pgbench
 
     pgbench -i buffer_temp
